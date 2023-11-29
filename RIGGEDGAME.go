@@ -100,23 +100,14 @@ func main() {
 			adj[y] = append(adj[y], x)
 		}
 		sub := make([]int, n) //number of guys in subtree
-		var init func(int, int)
-		init = func(curNode int, prevNode int) {
-			sub[curNode] = 1
-			for _, i := range adj[curNode] {
-				if i != prevNode {
-					init(i, curNode)
-					sub[curNode] += sub[i]
-				}
-			}
-		}
-		init(0, 0)
 		var brute func(int, int, int) int64
 		brute = func(curNode int, prevNode int, d int) int64 { //return sum of depths
 			ans := int64(d)
+			sub[curNode] = 1
 			for _, i := range adj[curNode] {
 				if i != prevNode {
 					ans += brute(i, curNode, d+1)
+					sub[curNode] += sub[i]
 				}
 			}
 			return ans
